@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
-                .setTitle("Login motherfucker")
+                .setTitle("Login")
                 .setView(input)
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
                     @Override
