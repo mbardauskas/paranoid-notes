@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.martynasb.paranoidnotes.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:context="com.example.martynasb.paranoidnotes.NewNoteActivity"
+    tools:showIn="@layout/activity_new_note">
 
-    <ListView
-        android:id="@+id/listview"
+    <TextView
+        android:id="@+id/list_item_note_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:text="Hi!!"/>
 
 </android.support.constraint.ConstraintLayout>
