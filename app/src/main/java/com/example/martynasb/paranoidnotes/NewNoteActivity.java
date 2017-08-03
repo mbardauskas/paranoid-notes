@@ -31,7 +31,7 @@ public class NewNoteActivity extends AppCompatActivity {
                         noteInput.getText().toString()
                 ));
 
-                Toast.makeText(NewNoteActivity.this, noteInput.getText(), Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
