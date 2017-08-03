@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private ListView listview;
     private NoteItemAdapter adapter;
+    private NoteService noteService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         listview = (ListView) findViewById(R.id.listview);
-
-        final NoteService noteService = ((ParanoidNotes) getApplication()).getNoteService();
+        noteService = ((ParanoidNotes) getApplication()).getNoteService();
 
         if (!noteService.hasPassword()) {
             showLogin();
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
                 .setTitle("Login motherfucker")
                 .setView(input)
                 .setNegativeButton("Close", new DialogInterface.OnClickListener() {
@@ -57,20 +57,28 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
+                .setPositiveButton("Login", null)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         finish();
                     }
                 })
-                .show()
         ;
+
+        AlertDialog dialog = alertDialogBuilder.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noteService.setPotentialPassword(input.getText().toString());
+
+                if (!noteService.isPotentialPasswordValid()) {
+                    Toast.makeText(MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void setupToolbarAndFab() {

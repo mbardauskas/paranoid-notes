@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class NoteService {
     private ArrayList<NoteItem> noteList = new ArrayList<>();
+    private String potentialPassword;
+
     public void addNote(NoteItem note) {
         noteList.add(note);
     }
@@ -16,5 +18,13 @@ public class NoteService {
 
     public boolean hasPassword() {
         return false;
+    }
+
+    public boolean isPotentialPasswordValid() {
+        return false;
+    }
+
+    public void setPotentialPassword(String potentialPassword) {
+        this.potentialPassword = potentialPassword;
     }
 }
