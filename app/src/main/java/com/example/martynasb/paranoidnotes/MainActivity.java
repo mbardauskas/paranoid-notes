@@ -1,15 +1,19 @@
 package com.example.martynasb.paranoidnotes;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,8 +34,43 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         listview = (ListView) findViewById(R.id.listview);
 
+        final NoteService noteService = ((ParanoidNotes) getApplication()).getNoteService();
+
+        if (!noteService.hasPassword()) {
+            showLogin();
+        }
+
         setupToolbarAndFab();
         setupActivityContent();
+    }
+
+    private void showLogin() {
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Login motherfucker")
+                .setView(input)
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
+                .show()
+        ;
     }
 
     private void setupToolbarAndFab() {
@@ -52,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupActivityContent() {
-        final NoteService noteService = ((ParanoidNotes)getApplication()).getNoteService();
+        final NoteService noteService = ((ParanoidNotes) getApplication()).getNoteService();
         final ArrayList<NoteItem> noteList = noteService.getNoteList();
 
         adapter = new NoteItemAdapter(this, noteList);

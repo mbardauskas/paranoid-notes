@@ -13,4 +13,8 @@ public class NoteService {
         noteList.add(new NoteItem("Note 22", "body 2"));
         return noteList;
     }
+
+    public boolean hasPassword() {
+        return false;
+    }
 }
