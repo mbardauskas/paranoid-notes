@@ -10,14 +10,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteItemAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<NoteItem> dataSource;
 
-    public NoteItemAdapter(Context context, ArrayList<NoteItem> items) {
+    public NoteItemAdapter(Context context, List<NoteItem> items) {
         this.context = context;
-        dataSource = items;
+        dataSource = new ArrayList<>(items);
     }
 
     @Override

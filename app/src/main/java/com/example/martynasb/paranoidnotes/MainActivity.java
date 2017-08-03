@@ -1,6 +1,5 @@
 package com.example.martynasb.paranoidnotes;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.listview);
         noteService = ((ParanoidNotes) getApplication()).getNoteService();
 
-        if (!noteService.hasPassword()) {
+        if (!noteService.isLoggedIn()) {
             showLogin();
         }
 
@@ -71,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noteService.setPotentialPassword(input.getText().toString());
-
-                if (!noteService.isPotentialPasswordValid()) {
+                if(!noteService.login(input.getText().toString())) {
                     Toast.makeText(MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupActivityContent() {
         final NoteService noteService = ((ParanoidNotes) getApplication()).getNoteService();
-        final ArrayList<NoteItem> noteList = noteService.getNoteList();
+        final List<NoteItem> noteList = noteService.getNoteList();
 
         adapter = new NoteItemAdapter(this, noteList);
         listview.setAdapter(adapter);
