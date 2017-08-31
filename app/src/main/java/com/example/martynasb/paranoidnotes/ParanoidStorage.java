@@ -90,10 +90,10 @@ class ParanoidStorage implements NoteStorage {
         return contentString;
     }
 
-    private static String decryptWithPassword(String contentString, String password) throws Exception {
+    private static String decryptWithPassword(String contentString, String password) {
         if (password.equals("123")) {
             return contentString;
         }
-        throw new Exception("wrong password");
+        return "something else";
     }
 }
