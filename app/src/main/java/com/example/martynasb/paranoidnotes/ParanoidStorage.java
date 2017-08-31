@@ -48,7 +48,7 @@ class ParanoidStorage implements NoteStorage {
         try {
             List<NoteItem> notes = getNoteList(password);
             notes.add(note);
-            storeNotesToStorage(notes);
+            storeNotesToStorage(notes, password);
         } catch (Exception e) {
             Log.e(tag, "Add note failed: " + e.toString());
         }
@@ -61,16 +61,17 @@ class ParanoidStorage implements NoteStorage {
         return getNoteListFromString(decryptedString);
     }
 
-    private void storeNotesToStorage(List<NoteItem> notes) throws Exception {
+    private void storeNotesToStorage(List<NoteItem> notes, String password) throws Exception {
         String noteJsonString = new Gson().toJson(notes);
         Log.d(tag, "store notes: " + noteJsonString);
+        String encryptedNotes = encryptWithPassword(noteJsonString, password);
 
         FileOutputStream fos = this.context.openFileOutput(
             FILE_NAME,
             Context.MODE_PRIVATE
         );
 
-        fos.write(noteJsonString.getBytes());
+        fos.write(encryptedNotes.getBytes());
         fos.close();
     }
 
@@ -95,5 +96,9 @@ class ParanoidStorage implements NoteStorage {
             return contentString;
         }
         return "something else";
+    }
+
+    private static String encryptWithPassword(String contentString, String password) {
+        return contentString;
     }
 }
