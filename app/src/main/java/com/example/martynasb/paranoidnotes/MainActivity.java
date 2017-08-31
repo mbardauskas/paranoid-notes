@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -74,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
                             MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT
                     ).show();
                 } else {
-                    Toast.makeText(
-                            MainActivity.this, "Correct!", Toast.LENGTH_SHORT
-                    ).show();
                     dialog.dismiss();
                     setupActivityContent();
                 }
@@ -104,22 +102,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupActivityContent() {
         final NoteService noteService = ParanoidNotes.fromContext(this).getNoteService();
-        final List<NoteItem> noteList = noteService.getNoteList();
+        try {
+            final List<NoteItem> noteList = noteService.getNoteList();
 
-        adapter = new NoteItemAdapter(this, noteList);
-        listview.setAdapter(adapter);
+            adapter = new NoteItemAdapter(this, noteList);
+            listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NoteItem currentNote = noteList.get(position);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    NoteItem currentNote = noteList.get(position);
 
-                Intent detailIntent = new Intent(MainActivity.this, NewNoteActivity.class);
-                detailIntent.putExtra("title", currentNote.getId());
+                    Intent detailIntent = new Intent(MainActivity.this, NewNoteActivity.class);
+                    detailIntent.putExtra("title", currentNote.getId());
 
-                startActivity(detailIntent);
-            }
-        });
+                    startActivity(detailIntent);
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(
+                    MainActivity.this, "Failed getting notes!", Toast.LENGTH_SHORT
+            ).show();
+        }
     }
 
 //    @Override

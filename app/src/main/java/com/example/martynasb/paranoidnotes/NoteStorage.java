@@ -6,5 +6,5 @@ interface NoteStorage {
     boolean isEmpty();
     boolean canDecryptWithPassword(String password);
     void addNoteItem(NoteItem note);
-    List<NoteItem> getNoteList();
+    List<NoteItem> getNoteList() throws Exception;
 }

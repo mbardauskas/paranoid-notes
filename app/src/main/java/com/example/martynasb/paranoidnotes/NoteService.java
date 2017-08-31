@@ -19,7 +19,7 @@ public class NoteService {
         }
     }
 
-    public List<NoteItem> getNoteList() {
+    public List<NoteItem> getNoteList() throws Exception {
         if (isLoggedIn()) {
             return storage.getNoteList();
         }
