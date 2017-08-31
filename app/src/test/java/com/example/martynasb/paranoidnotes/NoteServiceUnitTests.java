@@ -86,7 +86,7 @@ public class NoteServiceUnitTests {
     }
 
     @Test
-    public void getNoteListShouldReturnEmptyListWhenNotLoggedIn() {
+    public void getNoteListShouldReturnEmptyListWhenNotLoggedIn() throws Exception {
         storage.addNoteItem(note);
         assertThat(noteService.isLoggedIn()).isFalse();
         assertThat(noteService.getNoteList()).isEmpty();
