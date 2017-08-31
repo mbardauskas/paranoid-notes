@@ -64,13 +64,21 @@ public class MainActivity extends AppCompatActivity {
                 })
         ;
 
-        AlertDialog dialog = alertDialogBuilder.show();
+        final AlertDialog dialog = alertDialogBuilder.show();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!noteService.login(input.getText().toString())) {
-                    Toast.makeText(MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            MainActivity.this, "Incorrect password!", Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    Toast.makeText(
+                            MainActivity.this, "Correct!", Toast.LENGTH_SHORT
+                    ).show();
+                    dialog.dismiss();
+                    setupActivityContent();
                 }
             }
         });
