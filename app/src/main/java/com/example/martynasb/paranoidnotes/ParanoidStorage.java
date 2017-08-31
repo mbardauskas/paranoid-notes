@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,12 @@ import java.util.List;
 
 class ParanoidStorage implements NoteStorage {
     private Context context;
+    private TextEncryptor noteEncryptor;
     final private String FILE_NAME = "note-storage.txt";
     final private String tag = "paranoid storage";
 
-    ParanoidStorage(Context context) {
+    ParanoidStorage(Context context, TextEncryptor encryptor) {
+        this.noteEncryptor = encryptor;
         this.context = context;
     }
 
@@ -57,14 +58,14 @@ class ParanoidStorage implements NoteStorage {
     @Override
     public List<NoteItem> getNoteList(String password) throws Exception {
         String contentString = getContentStringFromStorage();
-        String decryptedString = decryptWithPassword(contentString, password);
+        String decryptedString = noteEncryptor.decryptWithPassword(contentString, password);
         return getNoteListFromString(decryptedString);
     }
 
     private void storeNotesToStorage(List<NoteItem> notes, String password) throws Exception {
         String noteJsonString = new Gson().toJson(notes);
         Log.d(tag, "store notes: " + noteJsonString);
-        String encryptedNotes = encryptWithPassword(noteJsonString, password);
+        String encryptedNotes = noteEncryptor.encryptWithPassword(noteJsonString, password);
 
         FileOutputStream fos = this.context.openFileOutput(
             FILE_NAME,
@@ -88,17 +89,6 @@ class ParanoidStorage implements NoteStorage {
         fis.read(fileContent);
         String contentString = new String(fileContent);
         Log.d(tag , "File content: " + contentString);
-        return contentString;
-    }
-
-    private static String decryptWithPassword(String contentString, String password) {
-        if (password.equals("123")) {
-            return contentString;
-        }
-        return "something else";
-    }
-
-    private static String encryptWithPassword(String contentString, String password) {
         return contentString;
     }
 }

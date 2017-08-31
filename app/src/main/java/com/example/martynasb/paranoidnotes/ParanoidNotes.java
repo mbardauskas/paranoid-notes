@@ -4,8 +4,6 @@ package com.example.martynasb.paranoidnotes;
 import android.app.Application;
 import android.content.Context;
 
-import java.util.List;
-
 public class ParanoidNotes extends Application {
     private NoteService noteService;
 
@@ -16,7 +14,12 @@ public class ParanoidNotes extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.noteService = new NoteService(new ParanoidStorage(getApplicationContext()));
+        this.noteService = new NoteService(
+            new ParanoidStorage(
+                getApplicationContext(),
+                new NoteEncryptor()
+            )
+        );
     }
 
     public NoteService getNoteService() {

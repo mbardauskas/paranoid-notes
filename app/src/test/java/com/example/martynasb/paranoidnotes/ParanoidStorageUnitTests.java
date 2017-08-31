@@ -4,6 +4,7 @@ import android.content.Context;
 import android.test.mock.MockContext;
 
 import org.assertj.core.api.ThrowableAssert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,28 +17,33 @@ import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 
 public class ParanoidStorageUnitTests {
     private ParanoidStorage storage;
+    private TextEncryptor encryptor;
 
+    @Before
+    public void setUp() throws Exception {
+        encryptor = new TestEncryptor();
+    }
     @Test
     public void isEmptyByDefault() throws Exception {
-        storage = new ParanoidStorage(fileNotFoundContent);
+        storage = new ParanoidStorage(fileNotFoundContent, encryptor);
         assertThat(storage.isEmpty()).isTrue();
     }
 
     @Test
     public void isNotEmptyWhenFileHasBeenCreatedAndContainsSomething() throws Exception {
-        storage = new ParanoidStorage(fileFoundAndNotEmptyContent);
+        storage = new ParanoidStorage(fileFoundAndNotEmptyContent, encryptor);
         assertThat(storage.isEmpty()).isFalse();
     }
 
     @Test
     public void isEmptyWhenFileHasBeenCreatedButIsEmpty() throws Exception {
-        storage = new ParanoidStorage(fileFoundAndEmptyContent);
+        storage = new ParanoidStorage(fileFoundAndEmptyContent, encryptor);
         assertThat(storage.isEmpty()).isTrue();
     }
 
     @Test
     public void getNoteListThrowsWhenUnableToReadNotes() throws Exception {
-        storage = new ParanoidStorage(fileFoundAndNotEmptyContent);
+        storage = new ParanoidStorage(fileFoundAndNotEmptyContent, encryptor);
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() throws Throwable {
@@ -48,7 +54,7 @@ public class ParanoidStorageUnitTests {
 
     @Test
     public void getNoteListReturnsAListOfNotes() throws Exception {
-        storage = new ParanoidStorage(fileFoundWithValidNoteItemJson);
+        storage = new ParanoidStorage(fileFoundWithValidNoteItemJson, encryptor);
         assertThat(storage.getNoteList("123")).isNotEmpty();
     }
 
