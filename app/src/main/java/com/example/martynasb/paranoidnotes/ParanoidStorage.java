@@ -62,22 +62,16 @@ public class ParanoidStorage implements NoteStorage {
 
     @Override
     public List<NoteItem> getNoteList() throws Exception {
-        try {
-            String notesJson = "";
-            FileInputStream fis = this.context.openFileInput(FILE_NAME);
-            byte fileContent[] = new byte[(int)fis.available()];
-            fis.read(fileContent);
-            String contentString = new String(fileContent);
-            System.out.println("File content: " + contentString);
-            List<NoteItem> notes = new Gson().fromJson(
-                contentString,
-                new TypeToken<ArrayList<NoteItem>>() {}.getType()
-            );
-            System.out.println("File json objects: " + notes);
-            return notes;
-        } catch (Exception e) {
-            Log.e("Get note list failed", e.toString());
-            throw new Exception("Failed getting notes");
-        }
+        FileInputStream fis = this.context.openFileInput(FILE_NAME);
+        byte fileContent[] = new byte[(int)fis.available()];
+        fis.read(fileContent);
+        String contentString = new String(fileContent);
+        System.out.println("File content: " + contentString);
+        List<NoteItem> notes = new Gson().fromJson(
+            contentString,
+            new TypeToken<ArrayList<NoteItem>>() {}.getType()
+        );
+        System.out.println("File json objects: " + notes);
+        return notes;
     }
 }
