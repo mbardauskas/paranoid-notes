@@ -27,8 +27,6 @@ class ParanoidStorage implements NoteStorage {
         try {
             FileInputStream fis = this.context.openFileInput(FILE_NAME);
             return fis.read() == -1;
-        } catch (FileNotFoundException e) {
-            return true;
         } catch (Exception e) {
             Log.e(tag, "isEmpty failed: " + e.toString());
             return true;
