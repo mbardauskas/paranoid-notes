@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupActivityContent() {
-        final NoteService noteService = ((ParanoidNotes) getApplication()).getNoteService();
+        final NoteService noteService = ParanoidNotes.fromContext(this).getNoteService();
         final List<NoteItem> noteList = noteService.getNoteList();
 
         adapter = new NoteItemAdapter(this, noteList);
