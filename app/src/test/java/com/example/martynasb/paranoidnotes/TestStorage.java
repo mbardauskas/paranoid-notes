@@ -7,6 +7,10 @@ class TestStorage implements NoteStorage {
     private String password = null;
     private List<NoteItem> noteList = new ArrayList<>();
 
+    void acceptPassword(String correctPassword) {
+        password = correctPassword;
+    }
+
     @Override
     public boolean isEmpty() {
         return noteList.isEmpty();
@@ -18,15 +22,14 @@ class TestStorage implements NoteStorage {
     }
 
     @Override
-    public void addNoteItem(NoteItem note) {
+    public void addNoteItem(NoteItem note, String password) {
         noteList.add(note);
     }
 
-    public void acceptPassword(String correctPassword) {
-        password = correctPassword;
-    }
-
-    public List<NoteItem> getNoteList() {
-        return noteList;
+    public List<NoteItem> getNoteList(String password) throws Exception {
+        if (this.password.equals(password)) {
+            return noteList;
+        }
+        throw new Exception("Wrong password");
     }
 }

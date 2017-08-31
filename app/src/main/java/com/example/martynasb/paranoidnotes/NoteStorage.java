@@ -5,6 +5,6 @@ import java.util.List;
 interface NoteStorage {
     boolean isEmpty();
     boolean canDecryptWithPassword(String password);
-    void addNoteItem(NoteItem note);
-    List<NoteItem> getNoteList() throws Exception;
+    void addNoteItem(NoteItem note, String password);
+    List<NoteItem> getNoteList(String password) throws Exception;
 }

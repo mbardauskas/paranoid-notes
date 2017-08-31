@@ -1,36 +1,34 @@
 package com.example.martynasb.paranoidnotes;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class NoteService {
+class NoteService {
     private String password = null;
     private NoteStorage storage;
 
-    public NoteService(NoteStorage storage) {
+    NoteService(NoteStorage storage) {
         this.storage = storage;
     }
 
-    public void addNote(NoteItem note) {
+    void addNote(NoteItem note) {
         if (isLoggedIn()) {
-            storage.addNoteItem(note);
+            storage.addNoteItem(note, this.password);
         }
     }
 
-    public List<NoteItem> getNoteList() throws Exception {
+    List<NoteItem> getNoteList() throws Exception {
         if (isLoggedIn()) {
-            return storage.getNoteList();
+            return storage.getNoteList(this.password);
         }
         return Collections.emptyList();
     }
 
-    public boolean isLoggedIn() {
+    boolean isLoggedIn() {
         return password != null;
     }
 
-    public boolean login(String password) {
+    boolean login(String password) {
         if (password.equals(this.password) || storage.canDecryptWithPassword(password)) {
             this.password = password;
             return true;
@@ -38,11 +36,11 @@ public class NoteService {
         return false;
     }
 
-    public boolean isFirstTimeUser() {
+    boolean isFirstTimeUser() {
         return !isLoggedIn() && storage.isEmpty();
     }
 
-    public void registerNewUser(String password) {
+    void registerNewUser(String password) {
         this.password = password;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.martynasb.paranoidnotes;
 
+import org.assertj.core.util.Compatibility;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -43,7 +44,8 @@ public class NoteServiceUnitTests {
 
     @Test
     public void hasNeverLoggedInShouldWhenStorageIsEmpty() {
-        storage.addNoteItem(note);
+        storage.acceptPassword("CorPas");
+        storage.addNoteItem(note, "CorPas");
         assertThat(noteService.isFirstTimeUser()).isFalse();
     }
 
@@ -61,6 +63,7 @@ public class NoteServiceUnitTests {
 
     @Test
     public void getNotesWhenLoggedIn() throws Exception {
+        storage.acceptPassword("CorrectPassword");
         noteService.registerNewUser("CorrectPassword");
         assertThat(noteService.isLoggedIn()).isTrue();
 
@@ -82,12 +85,17 @@ public class NoteServiceUnitTests {
         noteService.login("CorPas");
 
         noteService.addNote(note);
-        assertThat(storage.getNoteList()).containsExactly(note);
+        try {
+            assertThat(storage.getNoteList("CorPas")).containsExactly(note);
+        } catch(Exception e) {
+            System.err.println("Failed get not list: " + e.toString());
+        }
     }
 
     @Test
     public void getNoteListShouldReturnEmptyListWhenNotLoggedIn() throws Exception {
-        storage.addNoteItem(note);
+        storage.acceptPassword("CorPas");
+        storage.addNoteItem(note, "CorPas");
         assertThat(noteService.isLoggedIn()).isFalse();
         assertThat(noteService.getNoteList()).isEmpty();
     }

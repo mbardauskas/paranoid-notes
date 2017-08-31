@@ -4,27 +4,18 @@ import android.content.Context;
 import android.test.mock.MockContext;
 
 import org.assertj.core.api.ThrowableAssert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.core.api.Java6Assertions.assertThatThrownBy;
 
 public class ParanoidStorageUnitTests {
     private ParanoidStorage storage;
-    private Context context;
-
-
-    @Before
-    public void setUp() throws Exception {
-        storage = new ParanoidStorage(this.context);
-    }
 
     @Test
     public void isEmptyByDefault() throws Exception {
@@ -50,7 +41,7 @@ public class ParanoidStorageUnitTests {
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() throws Throwable {
-                storage.getNoteList();
+                storage.getNoteList("321");
             }
         });
     }
@@ -58,7 +49,7 @@ public class ParanoidStorageUnitTests {
     @Test
     public void getNoteListReturnsAListOfNotes() throws Exception {
         storage = new ParanoidStorage(fileFoundWithValidNoteItemJson);
-        assertThat(storage.getNoteList()).isNotEmpty();
+        assertThat(storage.getNoteList("123")).isNotEmpty();
     }
 
 

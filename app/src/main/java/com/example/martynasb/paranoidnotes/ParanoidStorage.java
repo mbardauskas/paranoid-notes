@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ParanoidStorage implements NoteStorage {
+class ParanoidStorage implements NoteStorage {
     private Context context;
     final private String FILE_NAME = "note-storage.txt";
     final private String tag = "paranoid storage";
 
-    public ParanoidStorage (Context context) {
+    ParanoidStorage(Context context) {
         this.context = context;
     }
 
@@ -37,13 +37,18 @@ public class ParanoidStorage implements NoteStorage {
 
     @Override
     public boolean canDecryptWithPassword(String password) {
-        return true;
+        try {
+            getNoteList(password);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public void addNoteItem(NoteItem note) {
+    public void addNoteItem(NoteItem note, String password) {
         try {
-            List<NoteItem> notes = getNoteList();
+            List<NoteItem> notes = getNoteList(password);
             notes.add(note);
             storeNotesToStorage(notes);
         } catch (Exception e) {
@@ -52,9 +57,10 @@ public class ParanoidStorage implements NoteStorage {
     }
 
     @Override
-    public List<NoteItem> getNoteList() throws Exception {
+    public List<NoteItem> getNoteList(String password) throws Exception {
         String contentString = getContentStringFromStorage();
-        return getNoteListFromString(contentString);
+        String decryptedString = decryptWithPassword(contentString, password);
+        return getNoteListFromString(decryptedString);
     }
 
     private void storeNotesToStorage(List<NoteItem> notes) throws Exception {
@@ -79,10 +85,17 @@ public class ParanoidStorage implements NoteStorage {
 
     private String getContentStringFromStorage() throws Exception {
         FileInputStream fis = this.context.openFileInput(FILE_NAME);
-        byte fileContent[] = new byte[(int)fis.available()];
+        byte fileContent[] = new byte[fis.available()];
         fis.read(fileContent);
         String contentString = new String(fileContent);
         Log.d(tag , "File content: " + contentString);
         return contentString;
+    }
+
+    private static String decryptWithPassword(String contentString, String password) throws Exception {
+        if (password.equals("123")) {
+            return contentString;
+        }
+        throw new Exception("wrong password");
     }
 }
