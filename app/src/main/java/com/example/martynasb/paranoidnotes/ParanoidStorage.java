@@ -67,10 +67,10 @@ public class ParanoidStorage implements NoteStorage {
             FileInputStream fis = this.context.openFileInput(FILE_NAME);
             byte fileContent[] = new byte[(int)fis.available()];
             fis.read(fileContent);
-            String s = new String(fileContent);
-            System.out.println("File content: " + s);
+            String contentString = new String(fileContent);
+            System.out.println("File content: " + contentString);
             List<NoteItem> notes = new Gson().fromJson(
-                s,
+                contentString,
                 new TypeToken<ArrayList<NoteItem>>() {}.getType()
             );
             System.out.println("File json objects: " + notes);
