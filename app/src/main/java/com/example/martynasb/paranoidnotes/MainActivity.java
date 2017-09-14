@@ -133,7 +133,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        // @TODO: optimise content changes
+        setupActivityContent();
     }
 
     private void setupActivityContent() {
