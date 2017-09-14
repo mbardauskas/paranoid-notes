@@ -38,8 +38,8 @@ class ParanoidStorage implements NoteStorage {
     @Override
     public boolean canDecryptWithPassword(String password) {
         try {
-            getNoteList(password);
-            return true;
+            List<NoteItem> list = getDecryptedAndFormedList(password);
+            return list != null;
         } catch (Exception e) {
             Log.d(tag, "Can't decrypt with password. Error" + e.toString());
             return false;
@@ -59,6 +59,14 @@ class ParanoidStorage implements NoteStorage {
 
     @Override
     public List<NoteItem> getNoteList(String password) throws Exception {
+        List<NoteItem> list = getDecryptedAndFormedList(password);
+        if (list == null) {
+            return new ArrayList<>();
+        }
+        return list;
+    }
+
+    private List<NoteItem> getDecryptedAndFormedList(String password) throws Exception {
         String contentString = getContentStringFromStorage();
         String decryptedString = noteEncryptor.decryptWithPassword(contentString, password);
         return getNoteListFromString(decryptedString);
