@@ -1,12 +1,14 @@
 package com.example.martynasb.paranoidnotes;
 
+import java.util.UUID;
+
 public class NoteItem {
     private String title;
     private String body;
     private String id;
 
     public NoteItem(String title, String body) {
-        this.id = "asd";
+        this.id = UUID.randomUUID().toString();
         this.title = title;
         this.body = body;
     }

@@ -15,20 +15,22 @@ public class ViewNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_note);
-        String noteTitle = getIntent().getStringExtra("noteTitle");
-        String noteBody = getIntent().getStringExtra("noteBody");
+        String noteId = getIntent().getStringExtra("noteId");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setupContent(noteTitle, noteBody);
+        setupContent(noteId);
     }
 
-    private void setupContent(String title, String body) {
-        setTitle(title);
+    private void setupContent(String noteId) {
+        final NoteService noteService = ((ParanoidNotes)getApplication()).getNoteService();
+
+        NoteItem note = noteService.getNoteById(noteId);
+        setTitle(note.getTitle());
 
         TextView text = (TextView) findViewById(R.id.view_note_text);
-        text.setText(body);
+        text.setText(note.getBody());
     }
 
 }

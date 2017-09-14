@@ -99,4 +99,28 @@ public class NoteServiceUnitTests {
         assertThat(noteService.isLoggedIn()).isFalse();
         assertThat(noteService.getNoteList()).isEmpty();
     }
+
+    @Test
+    public void getNoteByIdReturnsNoteWhenItExists() {
+        String password = "123";
+
+        storage.acceptPassword(password);
+        storage.addNoteItem(note, password);
+        noteService.login(password);
+
+        assertThat(noteService.getNoteById(note.getId())).isEqualTo(note);
+    }
+
+    @Test
+    public void getNoteByIdReturnsEmptyNoteWhenOneIsNotExistant() {
+        String password = "123";
+
+        storage.acceptPassword(password);
+        storage.addNoteItem(note, password);
+        noteService.login(password);
+
+        NoteItem gotNote = noteService.getNoteById("other-id");
+        assertThat(gotNote.getTitle()).isEqualTo("");
+        assertThat(gotNote.getBody()).isEqualTo("");
+    }
 }

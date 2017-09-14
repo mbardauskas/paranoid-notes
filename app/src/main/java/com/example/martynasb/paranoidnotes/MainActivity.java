@@ -151,8 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     NoteItem currentNote = noteList.get(position);
 
                     Intent detailIntent = new Intent(MainActivity.this, ViewNoteActivity.class);
-                    detailIntent.putExtra("noteTitle", currentNote.getTitle());
-                    detailIntent.putExtra("noteBody", currentNote.getBody());
+                    detailIntent.putExtra("noteId", currentNote.getId());
 
                     startActivity(detailIntent);
                 }
