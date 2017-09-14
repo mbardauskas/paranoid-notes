@@ -150,8 +150,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     NoteItem currentNote = noteList.get(position);
 
-                    Intent detailIntent = new Intent(MainActivity.this, NewNoteActivity.class);
-                    detailIntent.putExtra("title", currentNote.getId());
+                    Intent detailIntent = new Intent(MainActivity.this, ViewNoteActivity.class);
+                    detailIntent.putExtra("noteTitle", currentNote.getTitle());
+                    detailIntent.putExtra("noteBody", currentNote.getBody());
 
                     startActivity(detailIntent);
                 }
