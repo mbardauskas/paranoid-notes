@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ class ParanoidStorage implements NoteStorage {
             getNoteList(password);
             return true;
         } catch (Exception e) {
+            Log.d(tag, "Can't decrypt with password. Error" + e.toString());
             return false;
         }
     }
@@ -84,11 +86,21 @@ class ParanoidStorage implements NoteStorage {
     }
 
     private String getContentStringFromStorage() throws Exception {
-        FileInputStream fis = this.context.openFileInput(FILE_NAME);
+        FileInputStream fis = getOrCreateFile(FILE_NAME);
         byte fileContent[] = new byte[fis.available()];
         fis.read(fileContent);
         String contentString = new String(fileContent);
         Log.d(tag , "File content: " + contentString);
         return contentString;
+    }
+
+    private FileInputStream getOrCreateFile(String filename) throws Exception {
+        try {
+            return this.context.openFileInput(filename);
+        } catch (FileNotFoundException e) {
+            FileOutputStream fos = this.context.openFileOutput(filename, Context.MODE_PRIVATE);
+            fos.close();
+            return this.context.openFileInput(filename);
+        }
     }
 }
