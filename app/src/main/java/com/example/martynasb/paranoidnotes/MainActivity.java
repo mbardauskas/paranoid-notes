@@ -35,12 +35,48 @@ public class MainActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.listview);
         noteService = ((ParanoidNotes) getApplication()).getNoteService();
 
-        if (!noteService.isLoggedIn()) {
+        if (noteService.isFirstTimeUser()) {
+            showFTE();
+        } else if (!noteService.isLoggedIn()) {
             showLogin();
         }
 
         setupToolbarAndFab();
         setupActivityContent();
+    }
+
+    private void showFTE() {
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this)
+                .setTitle("Set password. And remember it!")
+                .setView(input)
+                .setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setPositiveButton("Set password", null)
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
+                ;
+
+        final AlertDialog dialog = alertDialogBuilder.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noteService.registerNewUser(input.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
     }
 
     private void showLogin() {
